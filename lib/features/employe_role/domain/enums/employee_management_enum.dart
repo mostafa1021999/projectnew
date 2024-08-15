@@ -1,0 +1,5 @@
+enum EmployeeManagement {
+  role,
+  employee,
+
+}

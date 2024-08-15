@@ -1,0 +1,3 @@
+enum AmountType {
+  discount, tax
+}
