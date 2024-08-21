@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
@@ -51,8 +53,8 @@ class CartController extends GetxController implements GetxService{
   final TextEditingController _extraDiscountController = TextEditingController();
   TextEditingController get extraDiscountController => _extraDiscountController;
 
-  double _returnToCustomerAmount = 0 ;
-  double get returnToCustomerAmount => _returnToCustomerAmount;
+  double ?_returnToCustomerAmount  ;
+  double? get returnToCustomerAmount => _returnToCustomerAmount;
 
   double _couponCodeAmount = 0;
   double get couponCodeAmount =>_couponCodeAmount;
@@ -60,8 +62,8 @@ class CartController extends GetxController implements GetxService{
   double _extraDiscountAmount = 0;
   double get extraDiscountAmount =>_extraDiscountAmount;
 
-  int _discountTypeIndex = 0;
-  int get discountTypeIndex => _discountTypeIndex;
+  int ?_discountTypeIndex ;
+  int? get discountTypeIndex => _discountTypeIndex;
 
 
   String? _selectedDiscountType = '';
@@ -139,8 +141,10 @@ class CartController extends GetxController implements GetxService{
 
   void getReturnAmount( double totalCostAmount){
     setReturnAmountToZero();
-
-    if(_customerId != 0  && Get.find<TransactionController>().selectedFromAccountId == 0){
+    if(_returnToCustomerAmount==null){
+      _customerWalletController.clear();
+    }
+    else if(_customerId != 0  && Get.find<TransactionController>().selectedFromAccountId == 0){
       _customerWalletController.text = _customerBalance.toString();
       _returnToCustomerAmount = double.parse(_customerWalletController.text) - totalCostAmount;
     }
@@ -169,6 +173,13 @@ class CartController extends GetxController implements GetxService{
     update();
 
   }
+  void removeCouponCodeAndExtraDiscount(double totalAmount){
+      _extraDiscountAmount = 0;
+      _customerCartList[_customerIndex].extraDiscount = 0;
+
+    update();
+
+  }
 
   void setReturnAmountToZero({bool isUpdate = true}) {
     _returnToCustomerAmount = 0;
@@ -180,10 +191,11 @@ class CartController extends GetxController implements GetxService{
 
 
   void addToCart(CartModel cartModel) {
+    var rng = Random();
     _amount = 0;
     if(_customerCartList.isEmpty){
       TemporaryCartListModel customerCart = TemporaryCartListModel(
-        cart: [], userIndex: 0, userId: 0, customerName: 'wc-0',
+        cart: [], userIndex: 0, userId: 0, customerName: '${rng.nextInt(10000000)}',
       );
 
      addToCartListForUser(customerCart, clear: false);
@@ -373,7 +385,11 @@ class CartController extends GetxController implements GetxService{
     }
     update();
   }
-
+  Future<void> removeCouponDiscount(String couponCode, int? userId, double orderAmount) async {
+    Response response = await cartRepo.getCouponDiscount(couponCode, userId, orderAmount);
+      _customerCartList[_customerIndex].couponAmount = 0;
+    update();
+  }
 
 
   void clearCardForCancel(){

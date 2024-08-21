@@ -42,7 +42,7 @@ class AccountManagementScreen extends StatelessWidget {
         ),
 
         CustomCategoryButtonWidget(
-          buttonText: Languagevalue=='ar'?'قائمه المصاريف':'expense_list'.tr,
+          buttonText: 'expense_list'.tr,
           icon: Images.expense,
           isSelected: false,
           isDrawer: false,
@@ -51,7 +51,7 @@ class AccountManagementScreen extends StatelessWidget {
         ),
 
         CustomCategoryButtonWidget(
-          buttonText: Languagevalue=='ar'?'اضافة مصاريف':'add_new_expanse'.tr,
+          buttonText: 'add_new_expanse'.tr,
           icon: Images.expense,
           isSelected: false,
           padding: width,

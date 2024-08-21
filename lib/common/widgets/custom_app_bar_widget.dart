@@ -31,7 +31,7 @@ class CustomAppBarWidget extends StatelessWidget implements PreferredSizeWidget 
         padding: const EdgeInsets.only(left: Dimensions.fontSizeExtraSmall),
         child: InkWell(
             onTap: ()=>  menuController.onChangeMenu(type: NavbarType.dashboard),
-            child: Image.asset(Images.logoWithName, width: 120, height: 30)),
+            child: Image.asset(Images.splashLogo, width: 120, height: 30)),
       ),
       title:const Text(''),
       actions: [

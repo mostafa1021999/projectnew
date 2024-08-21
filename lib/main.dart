@@ -25,7 +25,6 @@ Future<void> main() async {
       debug: true ,
       ignoreSsl: true
   );
-  await Save.init();
   await Permission.location.request();
   await Permission.bluetooth.request();
   await Permission.bluetoothConnect.request();

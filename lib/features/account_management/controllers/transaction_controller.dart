@@ -147,7 +147,6 @@ class TransactionController extends GetxController implements GetxService{
     if(response.statusCode == 200) {
       _transactionList ??=  [];
       _transactionList?.addAll(TransactionModel.fromJson(response.body).transferList ?? []);
-      _transactionListLength = TransactionModel.fromJson(response.body).totalSize;
       _isLoading = false;
       _isFirst = false;
     }else {
@@ -230,6 +229,7 @@ class TransactionController extends GetxController implements GetxService{
         for(int index = 0; index < _accountList!.length; index++) {
           _fromAccountIds ??= [];
           _fromAccountIds?.add(_accountList![index].id);
+          print(_accountList![index].id);
         }
       }
       if(_accountList!.isNotEmpty){
@@ -237,7 +237,7 @@ class TransactionController extends GetxController implements GetxService{
           _toAccountIds ??= [];
           _toAccountIds?.add(_accountList![index].id);
         }
-        // _toAccountIndex = _toAccountIds[0];
+        _toAccountIndex = _toAccountIds![0];
       }
 
       _isLoading = false;
@@ -254,7 +254,6 @@ class TransactionController extends GetxController implements GetxService{
     _fromAccountIds = [];
     if ((_accountList!.any((e) => e.id == accounts.id && Get.find<CartController>().customerId == 0)) ) {
       if(accounts.id == 0){
-        _accountList!.removeAt(_accountList!.length-1);
         for(int index = 0; index < _accountList!.length; index++) {
           _fromAccountIds ??= [];
           _fromAccountIds?.add(_accountList![index].id);

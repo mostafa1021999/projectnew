@@ -246,7 +246,7 @@ class _InVoiceScreenState extends State<InVoiceScreen> {
                           const SizedBox(height: Dimensions.paddingSizeDefault),
 
 
-                          if(orderController.invoice?.account?.account?.toLowerCase() == 'cash') Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
+                          if(orderController.invoice?.account?.account?.toLowerCase() == 'cash'.tr) Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
                             Text('change'.tr,style: fontSizeRegular.copyWith(fontSize: Dimensions.fontSizeDefault),),
                             Text(PriceConverterHelper.priceWithSymbol(orderController.invoice!.collectedCash! - totalPayableAmount),
                                 style: fontSizeRegular.copyWith(fontSize: Dimensions.fontSizeDefault)),

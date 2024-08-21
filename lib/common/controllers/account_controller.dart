@@ -85,9 +85,19 @@ class AccountController extends GetxController implements GetxService{
     }else {
       ApiChecker.checkApi(response);
     }
+    print('ttttttttttttttttttttttttt ${response.toString()}');
+    print(response.body);
     update();
   }
-
+  Future<void> updateItemVat(id,body) async {
+    Response response = await accountRepo.updateItemList(id,body);
+    if(response.statusCode == 200 && response.body != null) {
+        showCustomSnackBarHelper( 'account_created_successfully'.tr, isError: false);
+    }else {
+      ApiChecker.checkApi(response);
+    }
+    update();
+  }
 
   Future<void> onSearchAccount(String search) async {
     if(search.isNotEmpty) {

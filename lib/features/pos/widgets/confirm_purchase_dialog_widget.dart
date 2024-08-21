@@ -13,7 +13,7 @@ class ConfirmPurchaseDialogWidget extends StatelessWidget {
     return Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Dimensions.paddingSizeSmall)),
         child: Container(padding: const EdgeInsets.all(Dimensions.paddingSizeExtraLarge),
-        height: 210,
+        height: 220,
           child: Column(children: [
           SizedBox(width: 70,height: 70,
             child: Image.asset(Images.confirmPurchase),),

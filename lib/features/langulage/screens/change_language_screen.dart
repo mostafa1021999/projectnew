@@ -103,7 +103,7 @@ class _ChooseLanguageScreenState extends State<ChooseLanguageScreen> {
             ),
             child: Row(children: [
               Expanded(child: CustomButtonWidget(
-                buttonText: Languagevalue=='ar'? 'حفظ':'save',
+                buttonText: 'save'.tr,
                 onPressed: () {
                   if (localizationController.languages.isNotEmpty && localizationController.selectedIndex != -1) {
                     localizationController.setLanguage(Locale(

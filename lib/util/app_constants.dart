@@ -98,7 +98,7 @@ class AppConstants {
   static const String addEmployeeUrl = '/api/v1/employee/store';
   static const String employeeUpdateUrl = '/api/v1/employee/update';
   static const String deleteEmployeeUrl = '/api/v1/employee/delete';
-
+  static const String updateItemsUri = '/api/v1/product/update';
   // Shared Key
   static const String theme = 'theme';
   static const String token = 'token';
@@ -119,32 +119,4 @@ class AppConstants {
     LanguageModel(imageUrl: Images.unitedKingdom, languageName: 'English', countryCode: 'US', languageCode: 'en'),
     LanguageModel(imageUrl: Images.saudi, languageName: 'عربي', countryCode: 'SA', languageCode: 'ar'),
   ];
-}
-String ?Languagevalue=Save.getdata(key: 'lang');
-class Save{
-  static SharedPreferences? sharedPrefrences;
-  static init()async{
-    sharedPrefrences= await SharedPreferences.getInstance();
-  }
-
-  static Future<bool> putdata({required String key, required bool value})
-  async{
-    return await sharedPrefrences!.setBool(key, value);
-  }
-  static dynamic getdata({required String key}){
-    return sharedPrefrences!.get(key);
-  }
-  static Future savedata({
-    required String key,
-    required dynamic value,
-  })async {
-    if(value is bool)  return await sharedPrefrences!.setBool(key,value);
-    if(value is String)  return await sharedPrefrences!.setString(key,value);
-    if(value is int)  return await sharedPrefrences!.setInt(key,value);
-    return await sharedPrefrences!.setDouble(key,value);
-  }
-  static Future<bool> remove({required String key})async
-  {
-    return await sharedPrefrences!.remove(key);
-  }
 }

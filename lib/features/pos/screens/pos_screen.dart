@@ -27,6 +27,10 @@ import 'package:six_pos/features/pos/widgets/extra_discount_dialog_widget.dart';
 import 'package:six_pos/features/pos/widgets/item_card_widget.dart';
 import 'package:six_pos/features/user/screens/add_new_user_screen.dart';
 
+import '../../dashboard/controllers/menu_controller.dart';
+import '../../dashboard/domain/tab_type_enum.dart';
+import '../../shop/controllers/profile_controller.dart';
+
 
 
 
@@ -47,6 +51,7 @@ class _PosScreenState extends State<PosScreen> {
   int userId = 0;
   String customerName = '';
   String customerId = '0';
+  TextEditingController moneyController  = TextEditingController();
 
   @override
   void initState() {
@@ -154,7 +159,7 @@ class _PosScreenState extends State<PosScreen> {
                                           cart: [],
                                           userIndex: customerId != '0' ?  int.parse(customerId) : rng.nextInt(10000),
                                           userId: customerId != '0' ?  int.parse(customerId) : int.parse(customerId),
-                                          customerName: customerId == '0'? 'wc-${rng.nextInt(10000)}':'${customerController.customerSelectedName} ${customerController.customerSelectedMobile}',
+                                          customerName: customerId == '0'? '${rng.nextInt(10000000)}':'${customerController.customerSelectedName} ${customerController.customerSelectedMobile}',
                                           customerBalance: customerController.customerBalance,
                                         );
                                         Get.find<CartController>().addToCartListForUser(customerCart, clear: true, payable: payable);
@@ -164,15 +169,12 @@ class _PosScreenState extends State<PosScreen> {
                                       },),
 
                                   ]),
-
-
                                   const CustomerSearchDialogWidget(),
                                 ]),
 
 
                               ],)),
                             const SizedBox(width: Dimensions.paddingSizeSmall),
-
                             Expanded(child: Column(children: [
                               Text('${'current_customer_status'.tr} :', style: fontSizeRegular.copyWith(fontSize: Dimensions.fontSizeSmall),),
 
@@ -204,10 +206,18 @@ class _PosScreenState extends State<PosScreen> {
                       }),
                       const SizedBox(height: Dimensions.paddingSizeExtraLarge),
 
-
+                    GetBuilder<BottomManuController>(builder: (menuController)=> GetBuilder<ProfileController>(builder: (profileController) =>Padding(
+                            padding: const EdgeInsets.only(left: 15.0,right: 15),
+                            child: CustomButtonWidget(
+                              buttonText: 'add_product'.tr,
+                              onPressed: () {
+                                  menuController.onChangeMenu(type: NavbarType.items);
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
                       GetBuilder<CartController>(builder: (customerCartController) {
-
-
                         return customerCartController.customerCartList.isNotEmpty ? Padding(
                           padding: const EdgeInsets.fromLTRB(Dimensions.paddingSizeDefault,0,Dimensions.paddingSizeDefault,0),
                           child: Container(
@@ -285,39 +295,47 @@ class _PosScreenState extends State<PosScreen> {
                             SizedBox(width: 120,height: 40,child: CustomButtonWidget(
                               buttonText: 'edit_discount'.tr,
                               onPressed:() => showAnimatedDialogHelper(
-                                context, ExtraDiscountDialogWidget(totalAmount: total),
+                                context, ExtraDiscountDialogWidget(totalAmount: total,isBank: false,sendReceipt:false),
                                 dismissible: false, isFlip: false,
                               ),
                             )),
 
                           ]),
                         ),
-                        ItemPriceWidget(title: 'subtotal'.tr, amount: PriceConverterHelper.priceWithSymbol(subTotal)),
+                        ItemPriceWidget(title: 'subtotal'.tr,amount: PriceConverterHelper.priceWithSymbol(subTotal)),
 
-                        ItemPriceWidget(title: 'product_discount'.tr, amount: PriceConverterHelper.priceWithSymbol(productDiscount)),
+                        ItemPriceWidget(title: 'product_discount'.tr,amount: PriceConverterHelper.priceWithSymbol(productDiscount)),
 
-                        ItemPriceWidget(title: 'coupon_discount'.tr, amount: PriceConverterHelper.priceWithSymbol(couponAmount),isCoupon: true,onTap: (){
+                        ItemPriceWidget(title: 'coupon_discount'.tr, total: (){cartController.removeCouponDiscount(
+                          cartController.couponController.text.trim(),
+                          cartController.customerId,
+                          cartController.amount,
+                        );}
+                          ,amount: PriceConverterHelper.priceWithSymbol(couponAmount),isCoupon: true,onTap: (){
                           showAnimatedDialogHelper(context,
                               const CouponDialogWidget(),
                               dismissible: false,
                               isFlip: false);
                         },),
 
-                        ItemPriceWidget(title: 'extra_discount'.tr, amount: PriceConverterHelper.convertPrice(
+                        ItemPriceWidget(title: 'extra_discount'.tr, total: (){
+                          cartController.removeCouponCodeAndExtraDiscount( total);},amount: PriceConverterHelper.convertPrice(
                             context, PriceConverterHelper.discountCalculation(context,
                           subTotal,
                           cartController.extraDiscountAmount,
                           cartController.selectedDiscountType,
                         ))),
 
-                        ItemPriceWidget(title: 'vat'.tr, amount: PriceConverterHelper.priceWithSymbol(productTax)),
+                        ItemPriceWidget(title: 'vat'.tr, amount: PriceConverterHelper.priceWithSymbol(productTax),total: (){
+                          PriceConverterHelper.priceWithSymbol(0);
+                        },),
 
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault),
                           child: CustomDividerWidget(height: .4,color: Theme.of(context).hintColor.withOpacity(1),),
                         ),
 
-                        ItemPriceWidget(title: 'total'.tr, amount: PriceConverterHelper.priceWithSymbol(total),isTotal: true),
+                        ItemPriceWidget(title: 'total'.tr, amount: PriceConverterHelper.priceWithSymbol(total),total: total,isTotal: true),
 
                         Padding(
                           padding: const EdgeInsets.fromLTRB(Dimensions.paddingSizeDefault,Dimensions.paddingSizeExtraSmall,
@@ -347,6 +365,15 @@ class _PosScreenState extends State<PosScreen> {
                                             child: Text(
                                                 accountController.accountList![(accountController.fromAccountIds!.indexOf(value))].account!));}).toList(),
                                       onChanged: (int? value) {
+                                        if(value==1||value==4){
+                                          FocusScope.of(context).requestFocus(_textFieldFocusNode);
+                                        }
+                                        if(value==2){
+                                          showAnimatedDialogHelper(
+                                            context, ExtraDiscountDialogWidget(totalAmount: total,isBank: false,sendReceipt:false),
+                                            dismissible: false, isFlip: false,
+                                          );
+                                        }
                                         accountController.setAccountIndex(value,'from', true);
                                         cartController.collectedCashController.clear();
                                         cartController.getReturnAmount(payable);
@@ -384,11 +411,12 @@ class _PosScreenState extends State<PosScreen> {
                                               hintText: 'balance_hint'.tr,
                                               isEnabled: transactionController.selectedFromAccountId == 0 && Get.find<CartController>().customerId !=0? false: true,
                                               controller: transactionController.selectedFromAccountId == 0 && Get.find<CartController>().customerId !=0 ? cartController.customerWalletController : cartController.collectedCashController,
-                                              inputType: transactionController.selectedFromAccountId == 1 ?TextInputType.number: TextInputType.text,
+                                              inputType: TextInputType.number,
                                               onChanged: (value){
                                                 if(transactionController.selectedFromAccountId == 1) {
-                                                  cartController.getReturnAmount(payable);                                                }
+                                                  cartController.getReturnAmount(payable); }
                                               },
+                                              focusNode: _textFieldFocusNode,
                                             ),
                                           ),);
                                       }
@@ -409,7 +437,7 @@ class _PosScreenState extends State<PosScreen> {
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall,
                                         vertical: Dimensions.paddingSizeExtraSmall),
-                                    child: Text(PriceConverterHelper.priceWithSymbol(cartController.returnToCustomerAmount), style: fontSizeRegular.copyWith(color: Theme.of(context).secondaryHeaderColor)),
+                                    child: Text(PriceConverterHelper.priceWithSymbol(cartController.returnToCustomerAmount??0), style: fontSizeRegular.copyWith(color: Theme.of(context).secondaryHeaderColor)),
                                   )
                                 ],),
                               ):const SizedBox();
@@ -446,11 +474,23 @@ class _PosScreenState extends State<PosScreen> {
                                 buttonText: 'place_order'.tr,
                                 onPressed: ()=> _onSubmit(),
                               )),
-
-
                             ]),
                           );
                         }),
+                        GetBuilder<BottomManuController>(builder: (menuController)=> GetBuilder<ProfileController>(builder: (profileController) =>Padding(
+                          padding: const EdgeInsets.only(left: 15.0,right: 15),
+                          child: CustomButtonWidget(
+                            buttonText: 'send_receipt'.tr,
+                            onPressed: () {
+                              showAnimatedDialogHelper(
+                                context, ExtraDiscountDialogWidget(totalAmount: total,isBank: true,sendReceipt: true),
+                                dismissible: false, isFlip: false,
+                              );
+                            },
+                          ),
+                        ),
+                        ),
+                        ),
                         const SizedBox(height: Dimensions.paddingSizeRevenueBottom,),
                       ],),
                     ],);
@@ -525,9 +565,6 @@ class _PosScreenState extends State<PosScreen> {
                     productTax + ((cart.product!.tax!/100) * cart.product!.sellingPrice!),
                   ));
                 }
-
-
-
                 PlaceOrderModel placeOrderBody = PlaceOrderModel(
                   cart: carts,
                   couponDiscountAmount: cartController.couponCodeAmount,
@@ -560,6 +597,13 @@ class _PosScreenState extends State<PosScreen> {
     }
   }
 }
+int selectedPaymentMethod = 1;
+final _textFieldFocusNode = FocusNode();
 
+Widget bottomRemove()=>CircleAvatar(
+  radius: 14,
+  backgroundColor: Colors.red,
+  child: Icon(Icons.close,color: Colors.white,),
+);
 
 

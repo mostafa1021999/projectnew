@@ -10,6 +10,8 @@ import 'package:six_pos/util/styles.dart';
 import 'package:six_pos/common/widgets/custom_divider.dart';
 import 'package:six_pos/common/widgets/custom_image_widget.dart';
 
+import '../../../common/controllers/account_controller.dart';
+
 
 
 class ItemCartWidget extends StatelessWidget {
@@ -86,6 +88,7 @@ class ItemCartWidget extends StatelessWidget {
                             child: Icon(Icons.add_circle),
                           ),
                         ),
+
                       ],);
                     }
                   ),
@@ -95,10 +98,33 @@ class ItemCartWidget extends StatelessWidget {
                     child: Text(PriceConverterHelper.priceWithSymbol(cartModel!.price!),
                         style: fontSizeRegular.copyWith(color: Theme.of(context).secondaryHeaderColor))),
 
+            GetBuilder<AccountController>(builder: (accountController)=> InkWell(
+                      onTap: () async {
+                        try {
+                          // Call the update method
+                          await accountController.updateItemVat(cartModel!.product!.id, {
+                            'id': 2
+                          });
 
+                          // Optionally, show a success message
+                          Get.snackbar('Success', 'VAT updated successfully!',
+                            snackPosition: SnackPosition.BOTTOM,
+                          );
+
+                        } catch (e) {
+                          // Handle errors more gracefully
+                          Get.snackbar('Error', 'Failed to update VAT',
+                            snackPosition: SnackPosition.BOTTOM,
+                            backgroundColor: Colors.red,
+                            colorText: Colors.white,
+                          );
+                          print('Error updating VAT: $e');
+                        }
+                      },
+                      child: const Icon(Icons.edit)),
+                ),
               ],),
               const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault),
                 child: CustomDividerWidget(height: .4,color: Theme.of(context).hintColor.withOpacity(.5),),

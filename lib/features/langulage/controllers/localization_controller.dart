@@ -26,12 +26,8 @@ class LocalizationController extends GetxController {
     _locale = locale;
     if(_locale.languageCode == 'ar') {
       _isLtr = false;
-      Languagevalue='ar';
-      Save.savedata(key: 'lang', value:'ar' );
     }else {
       _isLtr = true;
-      Languagevalue='en';
-      Save.savedata(key: 'lang', value:'en' );
     }
     saveLanguage(_locale);
     update();

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:six_pos/features/auth/controllers/auth_controller.dart';
+import 'package:six_pos/features/createAcount/CreatAcount.dart';
 import 'package:six_pos/helper/email_checker.dart';
 import 'package:six_pos/helper/gradient_color_helper.dart';
 import 'package:six_pos/util/app_constants.dart';
@@ -17,6 +18,7 @@ import 'package:six_pos/helper/show_custom_snackbar_helper.dart';
 import 'package:six_pos/common/widgets/custom_text_field_widget.dart';
 import 'package:six_pos/common/widgets/custom_dialog_widget.dart';
 import 'package:six_pos/features/dashboard/screens/nav_bar_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({Key? key}) : super(key: key);
@@ -72,7 +74,10 @@ class _LogInScreenState extends State<LogInScreen> {
               return Column( mainAxisAlignment: MainAxisAlignment.center, mainAxisSize: MainAxisSize.min, children: [
                 Flexible(child: SingleChildScrollView(
                   child: Column(children: [
-                    Image.asset(Images.splashLogo, width: 150),
+                    InkWell(
+                        onTap: ()async{
+                          await launchUrl(Uri.parse('https://erpstax.com/'));},
+                        child: Image.asset(Images.splashLogo, width: 150)),
                     const SizedBox(height: Dimensions.paddingSizeExtraLarge),
 
                     Text('log_in'.tr, style: fontSizeBlack.copyWith(fontSize: Dimensions.fontSizeOverOverLarge)),
@@ -179,17 +184,17 @@ class _LogInScreenState extends State<LogInScreen> {
                 ),):const SizedBox(),
                 SizedBox(height: 10,),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    createAccount('أنشاء حساب',context),
-                    createAccount('الدعم الفنى',context),
+                    createAccount('أنشاء حساب',context,(){Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CreateUserScreen()));}),
+                    createAccount('الدعم الفنى',context,(){openCustomerSupport();}),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    imageLogos(Images.logo,70.0),
                     imageLogos(Images.visionsaud,100.0),
+                    imageLogos(Images.logo,70.0),
                     imageLogos(Images.saudiIncome,100.0),
                   ],
                 ),
@@ -252,8 +257,8 @@ Future<bool> _onWillPop(BuildContext context) async {
   return true;
 }
 
-Widget createAccount(name,context)=>InkWell(
-  onTap: (){},
+Widget createAccount(name,context,onTap)=>InkWell(
+  onTap: onTap,
   child: Container(
     padding: EdgeInsets.all(8),
     decoration: BoxDecoration(
@@ -266,3 +271,11 @@ Widget createAccount(name,context)=>InkWell(
 
 Widget imageLogos(name,height)=>
     Image.asset(name,height: height,width: 100, );
+Future<void> openCustomerSupport() async {
+  final Uri launchUri = Uri(
+    scheme: 'https',
+    host: 'wa.me',
+    path: '+966591667623',
+  );
+  await launchUrl(launchUri);
+}

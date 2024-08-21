@@ -82,7 +82,7 @@ class CustomDrawerWidget extends StatelessWidget {
               child: ListView(padding: EdgeInsets.zero, children: [
                CustomCategoryButtonWidget(
                   icon: Images.dashboard,
-                  buttonText: Languagevalue=='ar'?'لوحة التحكم':'dashboard', onTap: (){
+                  buttonText: 'dashboard'.tr, onTap: (){
                     Get.back();
                     Get.to(()=> const NavBarScreen());
                     manuController.onChangeMenu(type: NavbarType.dashboard);
@@ -91,7 +91,7 @@ class CustomDrawerWidget extends StatelessWidget {
 
                 if(profileController.modulePermission?.pos ?? false) CustomCategoryButtonWidget(
                   icon: Images.pos,
-                  buttonText: Languagevalue=='ar'? 'قسم الفواتير':'pos_section'.tr, onTap: (){
+                  buttonText: 'pos_section'.tr, onTap: (){
                   Get.back();
                   Get.to(()=> const NavBarScreen());
                   manuController.onChangeMenu(type: NavbarType.pos);
@@ -108,7 +108,7 @@ class CustomDrawerWidget extends StatelessWidget {
 
                 if(profileController.modulePermission?.pos ?? false) CustomCategoryButtonWidget(
                   icon: Images.item,
-                  buttonText: Languagevalue=='ar'? 'الطلبات':'orders'.tr,
+                  buttonText: 'orders'.tr,
                   onTap: ()=> Get.to(()=> const OrderScreen(fromNavBar: false)),
                   showDivider: true,
                 ),
@@ -151,7 +151,7 @@ class CustomDrawerWidget extends StatelessWidget {
 
                 CustomCategoryButtonWidget(
                   icon: Images.logout,
-                  buttonText: Languagevalue=='ar'?'تسجيل الخروج':'log_out'.tr,
+                  buttonText: 'log_out'.tr,
                   onTap: () => showAnimatedDialogHelper(context, const SignOutDialogWidget(), isFlip: true),
                   showDivider: true,
                 ),
