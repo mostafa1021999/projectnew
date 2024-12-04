@@ -20,6 +20,8 @@ import 'package:six_pos/common/widgets/custom_dialog_widget.dart';
 import 'package:six_pos/features/dashboard/screens/nav_bar_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../forget password/forget password screen.dart';
+
 class LogInScreen extends StatefulWidget {
   const LogInScreen({Key? key}) : super(key: key);
 
@@ -112,14 +114,12 @@ class _LogInScreenState extends State<LogInScreen> {
                       Expanded(
                         child: ListTile(
                           onTap: () => authController.toggleRememberMe(),
-                          leading: Checkbox(
-                            activeColor: Theme.of(context).primaryColor,
-                            checkColor: Colors.white,
-                            value: authController.isActiveRememberMe,
-                            onChanged: (bool? isChecked) =>
-                                authController.toggleRememberMe(),
+                          title: InkWell(
+                            onTap: (){Navigator.of(context)
+                                .push(MaterialPageRoute(builder: (context) => const ForgetPasswordScreen()));},
+                            child: Text('forget_password'.tr,
+                                style: TextStyle(fontSize: 14, color: Colors.grey.shade700)),
                           ),
-                          title: Text('remember_me'.tr),
                           contentPadding: EdgeInsets.zero,
                           dense: true,
                           horizontalTitleGap: 0,
@@ -186,8 +186,8 @@ class _LogInScreenState extends State<LogInScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    createAccount('أنشاء حساب',context,(){Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CreateUserScreen()));}),
-                    createAccount('الدعم الفنى',context,(){openCustomerSupport();}),
+                    createAccount('create_account'.tr,context,(){Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CreateUserScreen()));}),
+                    createAccount('support'.tr,context,(){openCustomerSupport();}),
                   ],
                 ),
                 Row(

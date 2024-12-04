@@ -10,6 +10,8 @@ import 'package:six_pos/common/reposotories/category_repo.dart';
 import 'package:six_pos/helper/show_custom_snackbar_helper.dart';
 import 'package:http/http.dart' as http;
 
+import '../models/response_model.dart';
+
 class CategoryController extends GetxController implements GetxService{
   final CategoryRepo categoryRepo;
   CategoryController({required this.categoryRepo});
@@ -42,8 +44,6 @@ class CategoryController extends GetxController implements GetxService{
   List<Products>? _searchedProductList;
   List<Products>? get searchedProductList =>_searchedProductList;
 
-
-
   final picker = ImagePicker();
   XFile? _categoryImage;
   XFile? get categoryImage=> _categoryImage;
@@ -69,7 +69,7 @@ class CategoryController extends GetxController implements GetxService{
       _isLoading = false;
       Get.back();
       showCustomSnackBarHelper(isUpdate? 'category_updated_successfully'.tr : 'category_added_successfully'.tr, isError: false);
-
+      Get.find<AuthController>().postActivities(dataEnglish: 'Updated category successfully', dataArabic: 'حدث قسم بنجاح');
     }
     else {
       ApiChecker.checkApi(await ApiChecker.getResponse(response));
@@ -113,7 +113,6 @@ class CategoryController extends GetxController implements GetxService{
     }
     update();
   }
-
 
   Future<void> getCategoryWiseProductList(int? categoryId, {bool isUpdate = true}) async {
     _categoriesProductList  = null;
@@ -198,6 +197,7 @@ class CategoryController extends GetxController implements GetxService{
       getSubCategoryList(1, parenCategoryId);
       Get.back();
       showCustomSnackBarHelper(isUpdate ? 'sub_category_update_successfully'.tr : 'sub_category_added_successfully'.tr, isError: false);
+      Get.find<AuthController>().postActivities(dataEnglish: 'Add sub category successfully', dataArabic: 'اضاف فئة فرعية بنجاح');
     }else {
       ApiChecker.checkApi(response);
     }
@@ -241,6 +241,7 @@ class CategoryController extends GetxController implements GetxService{
       getCategoryList(1);
       Get.back();
       showCustomSnackBarHelper('category_deleted_successfully'.tr, isError: false);
+      Get.find<AuthController>().postActivities(dataEnglish: 'Deleted category successfully', dataArabic: 'حذف قسم بنجاح');
     }else {
       Get.back();
       ApiChecker.checkApi(response);
@@ -257,7 +258,7 @@ class CategoryController extends GetxController implements GetxService{
     if(response.statusCode == 200) {
       getSubCategoryList(1, subCategory.parentId);
       showCustomSnackBarHelper('sub_category_deleted_successfully'.tr, isError: false);
-
+      Get.find<AuthController>().postActivities(dataEnglish: 'Deleted sub category successfully', dataArabic: 'حذف فئة فرعية بنجاح');
     }else {
       ApiChecker.checkApi(response);
     }
@@ -281,6 +282,7 @@ class CategoryController extends GetxController implements GetxService{
     if(response.statusCode == 200){
       getSubCategoryList(1, categorySelectedIndex);
       showCustomSnackBarHelper('category_status_updated_successfully'.tr, isError: false);
+      Get.find<AuthController>().postActivities(dataEnglish: 'update category status successfully', dataArabic: 'عدل حاله قسم بنجاح');
     }else{
       ApiChecker.checkApi(response);
     }

@@ -24,5 +24,4 @@ class CartRepo{
   Future<Response> getCustomerByName(String name) async {
     return await apiClient.getData('${AppConstants.customerSearchUri}?name=$name');
   }
-
 }

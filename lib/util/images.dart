@@ -1,5 +1,5 @@
 class Images {
-  static const String logo = 'assets/image/Logo.png';
+  static const String logo = 'assets/image/LogoSplash.png';
   static const String saudiIncome = 'assets/image/saudiIncome.png';
   static const String visionsaud = 'assets/image/Saudi_Vision.png';
   static const String splashLogo = 'assets/image/LogoSplash.png';
@@ -56,6 +56,7 @@ class Images {
   static const String download = 'assets/image/download.png';
   static const String downloadFormat = 'assets/image/download_format.png';
   static const String confirmPurchase = 'assets/image/confirm_purchase.png';
+  static const String report  = 'assets/image/report.png';
   static const String noDataFound = 'assets/image/no_data_found.png';
   static const String limitedStock = 'assets/image/limited_stock.png';
   static const String myAccount = 'assets/image/my_account.png';

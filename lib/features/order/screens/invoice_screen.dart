@@ -273,9 +273,7 @@ class _InVoiceScreenState extends State<InVoiceScreen> {
                             Text('${'shop_online'.tr} ${shopController.configModel?.businessInfo?.shopName ?? ''}', maxLines:2,textAlign: TextAlign.center,
                               style: fontSizeRegular.copyWith(fontSize: Dimensions.fontSizeSmall),),
                           ],),
-
                           const SizedBox(height: Dimensions.paddingSizeCustomBottom),
-
                         ],),
                       ):const SizedBox();
                     }

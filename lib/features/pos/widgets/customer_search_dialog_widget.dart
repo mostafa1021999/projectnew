@@ -41,6 +41,7 @@ class CustomerSearchDialogWidget extends StatelessWidget {
                           searchCustomer.searchedCustomerList![index].name,
                           searchCustomer.searchedCustomerList![index].mobile,
                           searchCustomer.searchedCustomerList![index].balance,
+                          searchCustomer.searchedCustomerList![index].email,
                           true,
                         );
                         searchCustomer.searchCustomerController.text = searchCustomer.searchedCustomerList![index].name!;

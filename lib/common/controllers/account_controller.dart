@@ -7,6 +7,8 @@ import 'package:six_pos/common/reposotories/account_repo.dart';
 import 'package:six_pos/features/splash/controllers/splash_controller.dart';
 import 'package:six_pos/helper/show_custom_snackbar_helper.dart';
 
+import '../../features/auth/controllers/auth_controller.dart';
+
 class AccountController extends GetxController implements GetxService{
   final AccountRepo accountRepo;
   AccountController({required this.accountRepo});
@@ -89,13 +91,18 @@ class AccountController extends GetxController implements GetxService{
     print(response.body);
     update();
   }
-  Future<void> updateItemVat(id,body) async {
-    Response response = await accountRepo.updateItemList(id,body);
+  Future<void> createNewAccount(body) async {
+    _isLoading=true;
+    update();
+    Response response = await accountRepo.createAccount(body);
     if(response.statusCode == 200 && response.body != null) {
+      Get.find<AuthController>().postActivities(dataEnglish: 'Create account successfully', dataArabic: 'انشاء مستخدم بنجاح');
         showCustomSnackBarHelper( 'account_created_successfully'.tr, isError: false);
+        _isLoading = false;
     }else {
       ApiChecker.checkApi(response);
     }
+    _isLoading=false;
     update();
   }
 
@@ -115,6 +122,10 @@ class AccountController extends GetxController implements GetxService{
     }else {
      await getAccountList(1);
     }
+    void setLoading(bool loading) {
+      _isLoading = loading;
+      update(); // This will notify the UI to reflect the loading state
+    }
   }
 
 
@@ -128,9 +139,8 @@ class AccountController extends GetxController implements GetxService{
     if(response.statusCode == 200) {
       getAccountList(1);
       Get.back();
-
-
       showCustomSnackBarHelper('account_deleted_successfully'.tr, isError: false);
+      Get.find<AuthController>().postActivities(dataEnglish: 'Delete account successfully', dataArabic: 'حذف المصاريف بنجاح');
     }else {
 
       Get.back();
@@ -150,6 +160,7 @@ class AccountController extends GetxController implements GetxService{
       getAccountList(1);
       Get.back();
       showCustomSnackBarHelper(isUpdate ? 'account_updated_successfully'.tr : 'account_created_successfully'.tr, isError: false);
+      Get.find<AuthController>().postActivities(dataEnglish: 'Update account successfully', dataArabic: 'حدث الحساب بنجاح');
     }else {
       ApiChecker.checkApi(response);
     }
@@ -230,6 +241,9 @@ class AccountController extends GetxController implements GetxService{
       update();
     }
   }
-
+  void setLoading(bool loading) {
+    _isLoading = loading;
+    update(); // This will notify the UI to reflect the loading state
+  }
 
 }

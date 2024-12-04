@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:six_pos/common/controllers/cart_controller.dart';
 import 'package:six_pos/features/dashboard/controllers/menu_controller.dart';
 import 'package:six_pos/features/dashboard/domain/tab_type_enum.dart';
 import 'package:six_pos/features/shop/controllers/profile_controller.dart';
+import 'package:six_pos/features/shop/widgets/shop_info_field_widget.dart';
 import 'package:six_pos/util/dimensions.dart';
 import 'package:six_pos/util/images.dart';
 import 'package:six_pos/util/styles.dart';
@@ -31,7 +34,7 @@ class CustomAppBarWidget extends StatelessWidget implements PreferredSizeWidget 
         padding: const EdgeInsets.only(left: Dimensions.fontSizeExtraSmall),
         child: InkWell(
             onTap: ()=>  menuController.onChangeMenu(type: NavbarType.dashboard),
-            child: Image.asset(Images.splashLogo, width: 120, height: 30)),
+            child:localImageLink!=null? Image.file(File(localImageLink!)):Image.asset(Images.splashLogo)),
       ),
       title:const Text(''),
       actions: [

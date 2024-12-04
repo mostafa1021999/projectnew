@@ -33,6 +33,7 @@ class PriceConverterHelper {
     }
     return discount;
   }
+
   static String discountCalculationWithOutSymbol(BuildContext context,double price, double discount, String? discountType) {
     if(discountType == 'amount') {
       discount =  discount;

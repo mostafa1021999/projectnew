@@ -6,6 +6,8 @@ import 'package:six_pos/features/account_management/domain/models/expense_model.
 import 'package:six_pos/features/account_management/domain/reposotories/expense_repo.dart';
 import 'package:six_pos/helper/show_custom_snackbar_helper.dart';
 
+import '../../auth/controllers/auth_controller.dart';
+
 class ExpenseController extends GetxController implements GetxService{
   final ExpenseRepo expenseRepo;
   ExpenseController({required this.expenseRepo});
@@ -63,6 +65,7 @@ class ExpenseController extends GetxController implements GetxService{
       await getExpenseList(1);
       _isLoading = false;
       Get.back();
+      Get.find<AuthController>().postActivities(dataArabic: 'Delete category expense successfully', dataEnglish: 'عدل حاله قسم بنجاح');
       showCustomSnackBarHelper('expense_deleted_successfully'.tr, isError: false);
     }else {
       ApiChecker.checkApi(response);

@@ -13,8 +13,8 @@ class AccountRepo{
     return await apiClient.getData('${AppConstants.getAccountListUri}?limit=10&offset=$offset');
   }
 
-  Future<Response> updateItemList(int id,body) async {
-    return await apiClient.postData('${AppConstants.updateItemsUri}',body);
+  Future<Response> createAccount(body) async {
+    return await apiClient.postData('${AppConstants.createAccountUri}',body);
   }
 
   Future<Response> searchAccount(String search) async {

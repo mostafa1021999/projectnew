@@ -22,6 +22,7 @@ class AuthController extends GetxController implements GetxService {
     Response response = await authRepo.login(emailAddress, password);
     ResponseModel? responseModel;
     if (response.statusCode == 200) {
+      postActivities(dataArabic: ' تم تسجل الدخول$emailAddress', dataEnglish: '$emailAddress have logged in');
       authRepo.saveUserToken(response.body['token']);
       responseModel = ResponseModel(true, 'successful');
       _isLoading = false;
@@ -37,7 +38,98 @@ class AuthController extends GetxController implements GetxService {
     update();
     return responseModel;
   }
+  Future<ResponseModel?> sendCodeEmail({required String emailAddress,}) async {
+    _isLoading = true;
+    update();
+    Response response = await authRepo.sendCodeEmail(emailAddress);
+    ResponseModel? responseModel;
+    if (response.statusCode == 200||response.statusCode == 201) {
+      responseModel = ResponseModel(true, 'successful');
+      _isLoading = false;
+    }else{
+      Map map = response.body;
 
+      // Extract the error message from the "errors" array
+      String? message;
+      if (map.containsKey('errors')) {
+        List errors = map['errors'];
+        if (errors.isNotEmpty && errors[0].containsKey('message')) {
+          message = errors[0]['message'];
+        }
+      }
+
+      message ??= 'Failed to send message';
+      showCustomSnackBarHelper(message, isError: true);
+    }
+    _isLoading = false;
+    update();
+    return responseModel;
+  }
+  Future<ResponseModel?> verifyCodeEmail({required String emailAddress,required String otp}) async {
+    _isLoading = true;
+    update();
+    Response response = await authRepo.checkCode(emailAddress,otp);
+    ResponseModel? responseModel;
+    if (response.statusCode == 200||response.statusCode == 201) {
+      responseModel = ResponseModel(true, 'successful');
+      _isLoading = false;
+    }else{
+      Map map = response.body;
+      String? message;
+      if (map.containsKey('errors')) {
+        List errors = map['errors'];
+        if (errors.isNotEmpty && errors[0].containsKey('message')) {
+          message = errors[0]['message'];
+        }
+      }
+
+      message ??= 'Failed to send message';
+      showCustomSnackBarHelper(message, isError: true);
+    }
+    _isLoading = false;
+    update();
+    return responseModel;
+  }
+  Future<ResponseModel?> changePassword({required String emailAddress,required String password,required String confirm}) async {
+    _isLoading = true;
+    update();
+    Response response = await authRepo.changePassword(emailAddress,password,confirm);
+    ResponseModel? responseModel;
+    if (response.statusCode == 200||response.statusCode == 201) {
+      postActivities(dataArabic: '$emailAddress هذا العميل غير كلمة المرور الخاصة به', dataEnglish: '$emailAddress have changed her password');
+      responseModel = ResponseModel(true, 'successful');
+      _isLoading = false;
+    }else{
+      Map map = response.body;
+      String? message;
+      if (map.containsKey('errors')) {
+        List errors = map['errors'];
+        if (errors.isNotEmpty && errors[0].containsKey('message')) {
+          message = errors[0]['message'];
+        }
+      }
+
+      message ??= 'Failed to send message';
+      showCustomSnackBarHelper(message, isError: true);
+    }
+    _isLoading = false;
+    update();
+    return responseModel;
+  }
+  Future<ResponseModel?> postActivities({required String dataArabic,required String dataEnglish,}) async {
+    _isLoading = true;
+    update();
+    Response response = await authRepo.postUserData(dataArabic,dataEnglish,);
+    ResponseModel? responseModel;
+    if (response.statusCode == 200||response.statusCode == 201) {
+
+    }else{
+
+    }
+    _isLoading = false;
+    update();
+    return responseModel;
+  }
   void toggleRememberMe() {
     _isActiveRememberMe = !_isActiveRememberMe;
     update();

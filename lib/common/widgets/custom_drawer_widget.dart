@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:six_pos/features/dashboard/controllers/menu_controller.dart';
 import 'package:six_pos/features/dashboard/domain/tab_type_enum.dart';
 import 'package:six_pos/features/employe_role/screens/employee_management_screen.dart';
+import 'package:six_pos/features/reports/screens/report_screen.dart';
 import 'package:six_pos/features/shop/controllers/profile_controller.dart';
 import 'package:six_pos/features/splash/controllers/splash_controller.dart';
 import 'package:six_pos/util/dimensions.dart';
@@ -119,7 +120,12 @@ class CustomDrawerWidget extends StatelessWidget {
                   onTap: ()=> Get.to(()=> const AccountManagementScreen()),
                   showDivider: true,
                 ),
-
+                CustomCategoryButtonWidget(
+                  icon: Images.report,
+                  buttonText: 'reports'.tr,
+                  onTap: ()=> Get.to(()=> const ReportScreen()),
+                  showDivider: true,
+                ),
                 if((profileController.modulePermission?.customer ?? false) || (profileController.modulePermission?.supplier ?? false))
                   CustomCategoryButtonWidget(
                     icon: Images.profilePlaceHolder,

@@ -12,6 +12,8 @@ import 'package:six_pos/util/messages.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'features/pos/screens/pos_screen.dart';
+import 'features/shop/widgets/shop_info_field_widget.dart';
 import 'helper/get_di.dart' as di;
 
 
@@ -20,7 +22,9 @@ Future<void> main() async {
     HttpOverrides.global = MyHttpOverrides();
   }
   WidgetsFlutterBinding.ensureInitialized();
+  await Save.init();
   await Firebase.initializeApp();
+  await PdfGenerator.init();
   await FlutterDownloader.initialize(
       debug: true ,
       ignoreSsl: true

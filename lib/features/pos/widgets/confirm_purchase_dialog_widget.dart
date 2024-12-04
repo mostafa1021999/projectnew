@@ -1,12 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:six_pos/util/color_resources.dart';
 import 'package:six_pos/util/dimensions.dart';
 import 'package:six_pos/util/images.dart';
 import 'package:six_pos/common/widgets/custom_button_widget.dart';
+
+import 'extra_discount_dialog_widget.dart';
 class ConfirmPurchaseDialogWidget extends StatelessWidget {
   final Function? onYesPressed;
-  const ConfirmPurchaseDialogWidget({Key? key, required this.onYesPressed}) : super(key: key);
+  ConfirmPurchaseDialogWidget({Key? key, required this.onYesPressed,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +30,7 @@ class ConfirmPurchaseDialogWidget extends StatelessWidget {
                   buttonColor: Theme.of(context).hintColor,textColor: ColorResources.getTextColor(),isClear: true,
                   onPressed: ()=>Get.back())),
               const SizedBox(width: Dimensions.paddingSizeDefault),
-              Expanded(child: CustomButtonWidget(buttonText: 'yes'.tr,onPressed: (){
+              Expanded(child: CustomButtonWidget(buttonText: 'yes'.tr,onPressed: ()async{
                 onYesPressed!();
                 Get.back();
               },)),

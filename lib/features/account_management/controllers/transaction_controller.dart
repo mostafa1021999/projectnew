@@ -10,6 +10,8 @@ import 'package:six_pos/features/account_management/domain/models/transaction_ty
 import 'package:six_pos/features/account_management/domain/reposotories/transaction_repo.dart';
 import 'package:six_pos/helper/show_custom_snackbar_helper.dart';
 
+import '../../auth/controllers/auth_controller.dart';
+
 class TransactionController extends GetxController implements GetxService{
   final TransactionRepo transactionRepo;
   TransactionController({required this.transactionRepo});
@@ -204,6 +206,7 @@ class TransactionController extends GetxController implements GetxService{
     if(response.statusCode == 200) {
       getTransactionList(1);
       Get.back();
+      Get.find<AuthController>().postActivities(dataArabic: 'Add transaction successfully', dataEnglish: 'إضاف المعاملة بنجاح');
       showCustomSnackBarHelper('transaction_added_successfully'.tr,  isError: false);
       _isLoading = false;
     }else {
@@ -305,6 +308,7 @@ class TransactionController extends GetxController implements GetxService{
     if(response.statusCode == 200) {
       Map map = response.body;
       _transactionExportFilePath = map['excel_report'];
+      Get.find<AuthController>().postActivities(dataArabic: 'Export Transaction List excel', dataEnglish: 'استخرج معلومات التحويل فى ملف اكسيل');
       _isLoading = false;
     }else {
       ApiChecker.checkApi(response);

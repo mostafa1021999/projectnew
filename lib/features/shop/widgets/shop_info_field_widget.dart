@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:six_pos/features/shop/controllers/profile_controller.dart';
 import 'package:six_pos/features/splash/controllers/splash_controller.dart';
 import 'package:six_pos/common/models/config_model.dart';
@@ -286,7 +287,7 @@ class _ShopInfoFieldWidgetState extends State<ShopInfoFieldWidget> {
               padding: const EdgeInsets.all(8.0),
               child: CustomButtonWidget(
                 isLoading: profileController.isLoading,
-                buttonText: 'update'.tr, onPressed: (){
+                buttonText: 'update'.tr, onPressed: ()async{
                 String shopName = shopNameController.text.trim();
                 String email = emailController.text.trim();
                 String phone = phoneController.text.trim();
@@ -311,11 +312,21 @@ class _ShopInfoFieldWidgetState extends State<ShopInfoFieldWidget> {
                 if(int.parse(pagination)<1){
                   showCustomSnackBarHelper('pagination_should_be_greater_than_0'.tr);
                 }else{
+                  try {
+                    final localImage = await splashController.downloadAndSaveImage('${Get.find<SplashController>().baseUrls!.shopImageUrl}/${widget.configModel!.businessInfo!.shopLogo ?? ''}');
+                    setState(() {
+                      Save.savedata(key: 'logoAppNewDa', value: localImage.path);
+                      localImageLink = localImage.path;
+                      print('ttttttttttttttttt $localImageLink');
+                    });
+                  } catch (e) {
+                    print('Failed to download image: $e');
+                  }
+                  print('ttttttttttttt $localImageLink');
                   profileController.updateShop(shop).then((value){
                     splashController.getConfigData();
                   });
                 }
-
               },),
             ),
           ],
@@ -329,8 +340,7 @@ class _ShopInfoFieldWidgetState extends State<ShopInfoFieldWidget> {
 //     child: Text("${country.name}"));
 
 
-
-
+String? localImageLink=Save.getdata(key: 'logoAppNewDa');
 class BuildDropdownItem extends StatelessWidget {
   final Country country;
   final bool isCountry;
@@ -342,5 +352,32 @@ class BuildDropdownItem extends StatelessWidget {
       width: MediaQuery.of(Get.context!).size.width-85,
       child: Text("${isCountry ?  country.name : country.currencyCode}"),
     );
+  }
+}
+class Save{
+  static SharedPreferences? sharedPrefrences;
+  static Future<void> init()async{
+    sharedPrefrences= await SharedPreferences.getInstance();
+  }
+
+  static Future<bool> putdata({required String key, required bool value})
+  async{
+    return await sharedPrefrences!.setBool(key, value);
+  }
+  static dynamic getdata({required String key}){
+    return sharedPrefrences!.get(key);
+  }
+  static Future savedata({
+    required String key,
+    required dynamic value,
+  })async {
+    if(value is bool)  return await sharedPrefrences!.setBool(key,value);
+    if(value is String)  return await sharedPrefrences!.setString(key,value);
+    if(value is int)  return await sharedPrefrences!.setInt(key,value);
+    return await sharedPrefrences!.setDouble(key,value);
+  }
+  static Future<bool> remove({required String key})async
+  {
+    return await sharedPrefrences!.remove(key);
   }
 }

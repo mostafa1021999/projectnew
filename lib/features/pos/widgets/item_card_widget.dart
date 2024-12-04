@@ -100,26 +100,6 @@ class ItemCartWidget extends StatelessWidget {
 
             GetBuilder<AccountController>(builder: (accountController)=> InkWell(
                       onTap: () async {
-                        try {
-                          // Call the update method
-                          await accountController.updateItemVat(cartModel!.product!.id, {
-                            'id': 2
-                          });
-
-                          // Optionally, show a success message
-                          Get.snackbar('Success', 'VAT updated successfully!',
-                            snackPosition: SnackPosition.BOTTOM,
-                          );
-
-                        } catch (e) {
-                          // Handle errors more gracefully
-                          Get.snackbar('Error', 'Failed to update VAT',
-                            snackPosition: SnackPosition.BOTTOM,
-                            backgroundColor: Colors.red,
-                            colorText: Colors.white,
-                          );
-                          print('Error updating VAT: $e');
-                        }
                       },
                       child: const Icon(Icons.edit)),
                 ),

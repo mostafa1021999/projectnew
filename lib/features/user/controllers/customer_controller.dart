@@ -74,6 +74,7 @@ class CustomerController extends GetxController implements GetxService{
       await getCustomerList(1);
       _isLoading = false;
       Get.back();
+      Get.find<AuthController>().postActivities(dataEnglish: 'Add customer ${customer.name} and id ${customer.id} successfully', dataArabic: ' بنجاح ${customer.id} و id ${customer.name}اضاف عميل ');
       showCustomSnackBarHelper(isUpdate ? 'customer_updated_successfully'.tr : 'customer_added_successfully'.tr, isError: false);
 
     }else {
@@ -127,6 +128,8 @@ class CustomerController extends GetxController implements GetxService{
     if(response.statusCode == 200) {
       Get.back();
       getCustomerList(1);
+      Get.find<AuthController>().postActivities(dataEnglish: 'Update balance for customer with id $customerId successfully', dataArabic: ' بنجاح$customerIdحدث المبلغ الخاص بعميل ');
+
       showCustomSnackBarHelper('customer_balance_updated_successfully'.tr, isError: false);
     }else {
       ApiChecker.checkApi(response);

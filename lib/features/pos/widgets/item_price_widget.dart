@@ -15,6 +15,7 @@ class ItemPriceWidget extends StatefulWidget {
   final bool isCoupon;
   final Function? onTap;
 
+
   ItemPriceWidget({Key? key, this.title, this.amount, this.isTotal = false, this.isCoupon = false, this.onTap,this.extraDiscount,this.total}) : super(key: key);
   @override
   State<ItemPriceWidget> createState() => _ItemPriceWidgetState();
@@ -36,14 +37,7 @@ class _ItemPriceWidgetState extends State<ItemPriceWidget> {
         widget.isCoupon?
         InkWell(
             onTap: widget.onTap as void Function()?,
-            child: const Icon(Icons.edit)):const SizedBox(),
-        if(widget.title=='vat'.tr)
-        InkWell(
-            onTap: (){
-            } ,
-            child: CircleAvatar(radius:10,backgroundColor: ColorResources.primaryColor,child: const Icon(Icons.edit,size: 17,color: Colors.white,))),
-        if(widget.title=='vat'.tr)
-          SizedBox(width: 5,),
+            child: CircleAvatar(radius:10,backgroundColor: ColorResources.primaryColor,child: const Icon(Icons.edit,size: 17,color: Colors.white,))):const SizedBox(),
         if(widget.title=='vat'.tr||widget.title=='extra_discount'.tr)
     InkWell(
             onTap: widget.total,

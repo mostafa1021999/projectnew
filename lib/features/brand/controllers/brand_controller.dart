@@ -46,6 +46,7 @@ class BrandController extends GetxController implements GetxService{
       await getBrandList(1);
       _isLoading = false;
       Get.back();
+      Get.find<AuthController>().postActivities(dataEnglish: 'Update brand successfully', dataArabic: 'حدث معلومات العلامة التجارية بنجاح');
       showCustomSnackBarHelper(brandId != null ? 'brand_updated_successfully'.tr : 'brand_added_successfully'.tr, isError: false);
       _brandImage = null;
 

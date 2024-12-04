@@ -14,7 +14,19 @@ class AuthRepo {
     return await apiClient.postData(AppConstants.loginUri, {"email": email, "password": password});
   }
 
+  Future<Response> sendCodeEmail(String email) async {
+    return await apiClient.postData(AppConstants.sendCodeUri, {"email": email,});
+  }
 
+  Future<Response> checkCode(String email, String otp) async {
+    return await apiClient.postData(AppConstants.verifyCodeUri, {"email": email, "otp": otp});
+  }
+  Future<Response> changePassword(String email, String password,String confirm,) async {
+    return await apiClient.postData(AppConstants.changePasswordUri, {"email": email, "password": password,"confirm_password":confirm});
+  }
+  Future<Response> postUserData(String actionAr, String actionEn,) async {
+    return await apiClient.postData(AppConstants.userActivities, {"action_ar": actionAr, "action_en": actionEn,});
+  }
 
   Future<bool> saveUserToken(String token) async {
     apiClient.token = token;

@@ -8,9 +8,15 @@ class AppConstants {
   static const String baseUrl = 'https://erpstax.online';
   static const String configUri = '/api/v1/config';
   static const String loginUri = '/api/v1/login';
+  static const String sendCodeUri = '/api/v1/forget';
+  static const String verifyCodeUri = '/api/v1/verify-code';
+  static const String uploadReceiptUri = '/api/v1/send-invoice';
+  static const String changePasswordUri = '/api/v1/change-password';
   static const String profileUri = '/api/v1/delivery-man/profile?token=';
   static const String orderListUri = '/api/v1/pos/order/list';
   static const String invoice = '/api/v1/pos/invoice';
+  static const String userActivities = '/api/v1/log-activities';
+  static const String userActivitiesReport = '/api/v1/log-activities';
   static const String addCategoryUri = '/api/v1/category/store';
   static const String getCategoryListUri = '/api/v1/category/list';
   static const String addSubCategoryUri = '/api/v1/sub/category/store';
@@ -30,6 +36,7 @@ class AppConstants {
   static const String deleteSupplierUri = '/api/v1/supplier/delete';
   static const String updateSupplierUri = '/api/v1/supplier/update';
   static const String getAccountListUri = '/api/v1/account/list';
+  static const String getProductReportUri = '/api/v1/product-reports';
   static const String searchAccountUri = '/api/v1/account/search';
   static const String addNewAccount = '/api/v1/account/save';
   static const String updateAccountUri = '/api/v1/account/update';
@@ -98,7 +105,7 @@ class AppConstants {
   static const String addEmployeeUrl = '/api/v1/employee/store';
   static const String employeeUpdateUrl = '/api/v1/employee/update';
   static const String deleteEmployeeUrl = '/api/v1/employee/delete';
-  static const String updateItemsUri = '/api/v1/product/update';
+  static const String createAccountUri = '/api/v1/register';
   // Shared Key
   static const String theme = 'theme';
   static const String token = 'token';

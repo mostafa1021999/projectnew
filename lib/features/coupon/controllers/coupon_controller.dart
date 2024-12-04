@@ -6,6 +6,8 @@ import 'package:six_pos/features/coupon/domain/models/coupon_model.dart';
 import 'package:six_pos/features/coupon/domain/reposotories/coupon_repo.dart';
 import 'package:six_pos/helper/show_custom_snackbar_helper.dart';
 
+import '../../auth/controllers/auth_controller.dart';
+
 class CouponController extends GetxController implements GetxService{
   final CouponRepo couponRepo;
   CouponController({required this.couponRepo});
@@ -54,6 +56,7 @@ class CouponController extends GetxController implements GetxService{
       _isLoading = false;
       getCouponList(1);
       Get.back();
+        Get.find<AuthController>().postActivities(dataArabic: 'Delete coupon with id $couponId successfully', dataEnglish: '$couponIdحذف الكوبون بنجاح id ');
       showCustomSnackBarHelper('coupon_deleted_successfully'.tr, isError: false);
 
     }else {
@@ -67,6 +70,7 @@ class CouponController extends GetxController implements GetxService{
     Response response = await couponRepo.toggleCouponStatus(couponId, status);
     if(response.statusCode == 200){
       _couponModel?.couponList?[index!].status = status;
+      Get.find<AuthController>().postActivities(dataArabic: 'Update coupon status with id $couponId successfully', dataEnglish: '$couponIdحدث حاله الكوبون بنجاح id ');
       showCustomSnackBarHelper('coupon_status_updated_successfully'.tr, isError: false);
     }else{
       ApiChecker.checkApi(response);
@@ -89,6 +93,7 @@ class CouponController extends GetxController implements GetxService{
     if(response.statusCode == 200){
       getCouponList(1);
       Get.back();
+      Get.find<AuthController>().postActivities(dataEnglish: isUpdate?'Update coupon with id ${coupon.id} successfully':'Add coupon with id ${coupon.id} successfully', dataArabic:isUpdate? '${coupon.id}حدث الكوبون بنجاح id ':'${coupon.id}أضاف الكوبون بنجاح id ');
       showCustomSnackBarHelper(isUpdate? 'coupon_updated_successfully'.tr : 'coupon_added_successfully'.tr, isError: false);
     }else{
       ApiChecker.checkApi(response);

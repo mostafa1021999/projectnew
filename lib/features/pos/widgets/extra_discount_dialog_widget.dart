@@ -14,7 +14,7 @@ import 'package:six_pos/common/widgets/custom_field_with_title_widget.dart';
 import 'package:six_pos/common/widgets/custom_text_field_widget.dart';
 
 import '../../../util/images.dart';
-
+List<bool> checklist = [false,false,false];
 class ExtraDiscountDialogWidget extends StatefulWidget {
   final double totalAmount;
   final bool isBank ;
@@ -27,7 +27,6 @@ class ExtraDiscountDialogWidget extends StatefulWidget {
 class _ExtraDiscountDialogWidget extends State<ExtraDiscountDialogWidget> {
   get productRepo => null;
   File? _shopLogo;
-  List<bool> checklist = [];
   TextEditingController dataController=TextEditingController();
   Future<void> _handleExtraDiscountSubmit() async{
     final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -45,9 +44,6 @@ class _ExtraDiscountDialogWidget extends State<ExtraDiscountDialogWidget> {
   }
   @override
   void initState() {
-    checklist = List.generate(
-          sendReceipt.length,(index)=>false,
-    );
     super.initState();
   }
   Widget checkList(isChecked,onChange,addNewName)=>CheckboxListTile(

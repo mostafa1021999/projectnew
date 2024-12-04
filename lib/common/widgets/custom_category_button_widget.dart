@@ -11,6 +11,7 @@ class CustomCategoryButtonWidget extends StatelessWidget {
   final double padding;
   final bool isDrawer;
   final Function? onTap;
+  final double? paddingHorizontal;
   final bool? showDivider;
   const CustomCategoryButtonWidget({
     Key? key,
@@ -19,6 +20,7 @@ class CustomCategoryButtonWidget extends StatelessWidget {
     this.isSelected = false,
     this.padding = Dimensions.paddingSizeDefault,
     this.isDrawer = true, this.onTap,
+    this.paddingHorizontal,
     this.showDivider = false,
   }) : super(key: key);
 
@@ -32,13 +34,13 @@ class CustomCategoryButtonWidget extends StatelessWidget {
             padding: isDrawer? const EdgeInsets.all(0.0):
             const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault, vertical: Dimensions.paddingSizeSmall),
             child: Container(
-                width: MediaQuery.of(context).size.width,
+                width: paddingHorizontal ?? MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                   borderRadius: isDrawer ? BorderRadius.zero : BorderRadius.circular(Dimensions.paddingSizeSmall),
                   gradient: GradientColorHelper.gradientColor(opacity: 0.03),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: padding),
+                  padding: EdgeInsets.symmetric(vertical: padding,),
                   child: Column(children: [
                     CustomAssetImageWidget(
                       icon,

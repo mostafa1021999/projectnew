@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 class PlaceOrderModel {
   List<Cart>? _cart;
   double? _couponDiscountAmount;
@@ -11,7 +13,7 @@ class PlaceOrderModel {
   int? _type;
   String? _transactionRef;
   String? _extraDiscountType;
-
+  String? _qrCode;
 
 
   PlaceOrderModel(
@@ -26,7 +28,7 @@ class PlaceOrderModel {
         int? type,
         String? transactionRef,
         String? extraDiscountType,
-
+        String? qrCode,
 
        }) {
     _cart = cart;
@@ -40,6 +42,7 @@ class PlaceOrderModel {
     _type =type;
     _transactionRef = transactionRef;
     _extraDiscountType = extraDiscountType;
+    _qrCode=qrCode;
 
   }
 
@@ -53,7 +56,7 @@ class PlaceOrderModel {
   int? get type => _type;
   String? get transactionRef => _transactionRef;
   String? get extraDiscountType => _extraDiscountType;
-
+  String? get qrcode => _qrCode;
 
   PlaceOrderModel.fromJson(Map<String, dynamic> json) {
     if (json['cart'] != null) {
@@ -71,7 +74,7 @@ class PlaceOrderModel {
     _type = json ['type'];
     _transactionRef = json ['transaction_reference'];
     _extraDiscountType = json ['extra_discount_type'];
-
+    _qrCode = json ['qrcode'];
 
   }
 
@@ -90,7 +93,7 @@ class PlaceOrderModel {
     data['type'] = _type;
     data['transaction_reference'] = _transactionRef;
     data['extra_discount_type'] = _extraDiscountType;
-
+    data['qrcode'] = _qrCode;
     return data;
   }
 }
@@ -101,37 +104,40 @@ class Cart {
   double? _discountAmount;
   int? _quantity;
   double? _taxAmount;
-
+  String? _productName; // Ensure you handle the product name
 
   Cart(
       String productId,
-        String price,
-        double discountAmount,
-        int? quantity,
-        double taxAmount,
+      String price,
+      double discountAmount,
+      int? quantity,
+      double taxAmount,
+      String productName, // Add product name to the constructor
       ) {
     _productId = productId;
     _price = price;
     _discountAmount = discountAmount;
     _quantity = quantity;
     _taxAmount = taxAmount;
-
+    _productName = productName; // Initialize product name
   }
 
+  // Add a getter for product name
+  String? get productName => _productName;
   String? get productId => _productId;
   String? get price => _price;
   double? get discountAmount => _discountAmount;
   int? get quantity => _quantity;
   double? get taxAmount => _taxAmount;
-
-
+  // Update the fromJson method to include product name if needed
   Cart.fromJson(Map<String, dynamic> json) {
     _productId = json['id'];
     _price = json['price'];
     _discountAmount = json['discount'];
     _quantity = json['quantity'];
     _taxAmount = json['tax'];
-
+    final Map<String, dynamic> productDetails = jsonDecode(json['product_details']);
+    _productName = productDetails['name']; // Decode and set product name
   }
 
   Map<String, dynamic> toJson() {
@@ -141,6 +147,8 @@ class Cart {
     data['discount'] = _discountAmount;
     data['quantity'] = _quantity;
     data['tax'] = _taxAmount;
+    // Include product name in JSON output if needed
+    data['product_name'] = _productName;
     return data;
   }
 }

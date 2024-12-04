@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:six_pos/features/auth/controllers/auth_controller.dart';
 import 'package:six_pos/data/api/api_checker.dart';
 import 'package:six_pos/common/models/config_model.dart';
@@ -9,6 +13,8 @@ import 'package:six_pos/features/splash/domain/models/revenue_model.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:six_pos/helper/show_custom_snackbar_helper.dart';
+import 'package:path/path.dart' as path;
+
 
 class ProfileController extends GetxController implements GetxService {
   final ProfileRepo profileRepo;
@@ -121,15 +127,16 @@ class ProfileController extends GetxController implements GetxService {
   final picker = ImagePicker();
   XFile? _shopLogo;
   XFile? get shopLogo=> _shopLogo;
+  File? savedImageFile;
   void pickImage(bool isRemove) async {
-    if(isRemove) {
+    if (isRemove) {
       _shopLogo = null;
-    }else {
-      _shopLogo = await ImagePicker().pickImage(source: ImageSource.gallery);
+      savedImageFile = null;
+    } else {
+      _shopLogo = await picker.pickImage(source: ImageSource.gallery);
     }
     update();
   }
-
   Future<http.StreamedResponse> updateShop(BusinessInfo shop) async {
 
     _isLoading = true;
@@ -138,6 +145,7 @@ class ProfileController extends GetxController implements GetxService {
     if(response.statusCode == 200) {
       _isLoading = false;
       Get.back();
+      Get.find<AuthController>().postActivities(dataEnglish: 'Update shop ${shop.shopName} successfully', dataArabic: ' ${shop.shopName}حدث بيانات المحل بنجاح ');
       showCustomSnackBarHelper('shop_updated_successfully'.tr, isError: false);
     }else {
       _isLoading = false;

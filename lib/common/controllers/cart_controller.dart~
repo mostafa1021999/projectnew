@@ -502,6 +502,77 @@ class CartController extends GetxController implements GetxService{
       update();
     }
   }
+  Future<String?> getTopProductReport(String startDate, String endDate,String keyList,String lang) async {
+    _isLoading = true;
+    update(); // Notify listeners that loading has started
+
+    try {
+      Response response = await cartRepo.getLowProductReport(startDate, endDate,keyList,lang);
+
+      if (response.statusCode == 200) {
+        print(response.body['url']);
+        return response.body['url'];
+      } else {
+        Get.back();
+        ApiChecker.checkApi(response);
+        return null;
+      }
+    } catch (e) {
+
+      return null;
+    } finally {
+      // Ensure loading is stopped in case of success or failure
+      _isLoading = false;
+      update(); // Notify listeners that loading has stopped
+    }
+  }
+  Future<String?> getLowProductReport(String startDate, String endDate,String keyList,String lang) async {
+    _isLoading = true;
+    update(); // Notify listeners that loading has started
+
+    try {
+      Response response = await cartRepo.getLowProductReport(startDate, endDate,keyList,lang);
+
+      if (response.statusCode == 200) {
+        print(response.body['url']);
+        return response.body['url'];
+      } else {
+        Get.back();
+        ApiChecker.checkApi(response);
+        return null;
+      }
+    } catch (e) {
+
+      return null;
+    } finally {
+      // Ensure loading is stopped in case of success or failure
+      _isLoading = false;
+      update(); // Notify listeners that loading has stopped
+    }
+  }
+  Future<String?> getUserActivitiesReport(String startDate, String endDate,String lang,{String? userId}) async {
+    _isLoading = true;
+    update(); // Notify listeners that loading has started
+
+    try {
+      Response response = await cartRepo.getUserActivitiesReport(startDate, endDate,lang,filterId: userId!=null?userId:userId );
+      if (response.statusCode == 200) {
+        print(response.body['pdf_url']);
+        return response.body['pdf_url'];
+      } else {
+        Get.back();
+        ApiChecker.checkApi(response);
+        return null;
+      }
+    } catch (e) {
+
+      return null;
+    } finally {
+      // Ensure loading is stopped in case of success or failure
+      _isLoading = false;
+      update(); // Notify listeners that loading has stopped
+    }
+  }
   Future<void> onSearchCustomer(String searchName) async {
     _searchedCustomerList = [];
     _isGetting = true;

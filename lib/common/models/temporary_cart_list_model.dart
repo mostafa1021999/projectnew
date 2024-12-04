@@ -5,6 +5,7 @@ class TemporaryCartListModel {
   List<CartModel>? _cart;
   int? _userId;
   String? _customerName;
+  String? _customerEmail;
   int? _userIndex;
   double? _customerBalance;
   double? _couponAmount;
@@ -19,6 +20,7 @@ class TemporaryCartListModel {
         int? userIndex,
         double? customerBalance,
         double? couponAmount,
+        String? customerEmail,
         double? extraDiscount,
       }) {
     _cart = cart;
@@ -28,12 +30,14 @@ class TemporaryCartListModel {
     _customerBalance = customerBalance;
     _couponAmount = couponAmount;
     _extraDiscount = extraDiscount;
+    _customerEmail = customerEmail;
 
   }
 
   List<CartModel>? get cart => _cart;
   int? get userId => _userId;
   String? get customerName => _customerName;
+  String? get customerEmail => _customerEmail;
   int? get userIndex => _userIndex;
   double? get customerBalance => _customerBalance;
   // ignore: unnecessary_getters_setters
